@@ -36,7 +36,7 @@ def load_data(population_file, distribution_center_file, county_file=''):
 
 if __name__ == '__main__':
     
-    p, d = load_data('Texas_At_Risk_AllData.csv','Distribution_center_locations_TX.csv')
+    p, d = load_data('data/Texas_At_Risk_AllData.csv','data/Distribution_center_locations_TX.csv')
     print(d.head())
     
     
