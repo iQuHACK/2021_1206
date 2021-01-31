@@ -1,5 +1,11 @@
 # Optimizing COVID-19 Vaccine Distribution Using Quantum Annealing
 
+To run this project with population constraint: 
+`python project_population_weights.py`
+
+To run this project without population constraints:
+`python final_project.py`
+
 Abstract
 ---
 Quantum annealing hardware has demonstrated the potential to solve discrete optimization problems by using qubits to model physical energy states. Using DWave’s annealing technology, we aim to gain solve problems relating to vaccine distribution. The goal of our project was to maximize the number of people vaccinated in the shortest possible time by reducing the distance they traveled. 
