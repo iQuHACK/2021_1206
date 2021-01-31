@@ -8,6 +8,8 @@ import pandas as pd
 from dwave.system import LeapHybridSampler
 from util import great_circle_distance
 import pylab
+import os
+import gmplot
 
 import matplotlib
 try:
@@ -202,37 +204,108 @@ def run_bqm_and_collect_solutions(bqm, sampler, potential_new_dist_nodes, **kwar
     return new_dist_nodes
 
 
+def iterate_bqm_and_graph(iters, run_num):
+    step = 77 // iters
+    d, c = load_data('data/Distribution_center_locations_TX.csv', 'data/TX_Counties.csv')
+    
+    all_nodes = []
+    all_pois = []
+    os.mkdir("results/run_{}".format(run_num))
+
+    for i in range(0, 77, step):
+        # Build large grid graph for city
+        G, sites, counties = build_graph(c, d)
+
+        # Build BQM
+        bqm = build_bqm(sites, len(counties), counties, 0, [], i)
+
+        # Run BQM on HSS
+        sampler = LeapHybridSampler()
+        print("\nRunning scenario on", sampler.solver.id, "solver...")
+
+        new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
+
+        # Print results to commnand-line for user
+        poi_avg_dist = printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes,
+                                                    len(new_charging_nodes))
+
+        try:
+            latitude_list = [x[0] for x in new_charging_nodes]
+            longitude_list = [x[1] for x in new_charging_nodes]
+
+            gmap = gmplot.GoogleMapPlotter(latitude_list[0],
+                                           longitude_list[0], 1000)
+
+            gmap.apikey = "AIzaSyB9N6G3mW559tfaPnaI_QVJo5MaTiwtOkE"
+
+            # scatter method of map object
+            # scatter points on the google map
+            gmap.scatter(latitude_list, longitude_list, 'blue',
+                         size=8000, marker=False)
+
+            gmap.draw("results/run_{}/map_{}.html".format(run_num, i))
+        except:
+            print("STEP 0")
+
+        all_nodes.append(new_charging_nodes)
+        all_pois.append(poi_avg_dist)
+
+    np.savetxt("results/run_{}/sites_{}.txt".format(run_num, i), all_nodes)
+    np.savetxt("results/run_{}/distances_{}.txt".format(run_num, i), all_pois)
+    
+    print("ALL NODES {}".format(all_nodes))
+    print("ALL POIS {}".format(all_pois))
+        
+        
+
 if __name__ == '__main__':
     # Load population 65+, county, and distribution center data from csv
-    d, c = load_data(
-        'data/Distribution_center_locations_TX.csv',
-        'data/TX_Counties.csv'
-    )
+#     d, c = load_data(
+#         'data/Distribution_center_locations_TX.csv',
+#         'data/TX_Counties.csv'
+#     )
 
-    # Set the desired number of new distribution centers to add to the map
-    num_new_dist = 5
+#     # Set the desired number of new distribution centers to add to the map
+#     num_new_dist = 5
 
-    # Set the desired current distribution centers on the map
-    current_dist = []
+#     # Set the desired current distribution centers on the map
+#     current_dist = []
 
-    # The desired number of current distribution centers on the map
-    num_current_dist = len(current_dist)
+#     # The desired number of current distribution centers on the map
+#     num_current_dist = len(current_dist)
 
-    # Build large grid graph for city
-    G, sites, counties = build_graph(c, d)
+#     # Build large grid graph for city
+#     G, sites, counties = build_graph(c, d)s
 
-    # Build BQM - SAMPLE NEW DIST FROM LIST OF DIST ONLY
-    bqm = build_bqm(sites, len(counties), counties, num_current_dist, current_dist, num_new_dist)
+#     # Build BQM - SAMPLE NEW DIST FROM LIST OF DIST ONLY
+#     bqm = build_bqm(sites, len(counties), counties, num_current_dist, current_dist, num_new_dist)
     
-    # Build BQM - SAMPLE NEW DIST FROM LIST OF COUNTIES ONLY
-    # bqm = build_bqm(counties, len(counties), counties, num_current_dist, current_dist, num_new_dist)
+#     # Build BQM - SAMPLE NEW DIST FROM LIST OF COUNTIES ONLY
+#     # bqm = build_bqm(counties, len(counties), counties, num_current_dist, current_dist, num_new_dist)
 
-    # Run BQM on HSS
-    sampler = LeapHybridSampler()
-    print("\nRunning scenario on", sampler.solver.id, "solver...")
+#     # Run BQM on HSS
+#     sampler = LeapHybridSampler()
+#     print("\nRunning scenario on", sampler.solver.id, "solver...")
 
-    new_dist_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
+#     new_dist_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
 
-    # Print results to commnand-line for user
-    printout_solution_to_cmdline(counties, len(
-        counties), current_dist, num_current_dist, new_dist_nodes, len(new_dist_nodes))
+#     # Print results to commnand-line for user
+#     printout_solution_to_cmdline(counties, len(
+#         counties), current_dist, num_current_dist, new_dist_nodes, len(new_dist_nodes))
+
+#     new_charging_nodes = [(32.324645, -98.83656), (29.985877, -100.307373), (29.985877, -100.307373), (32.347279, -96.798336), (32.238136, -98.222377), (29.877886, -96.921231), (29.877886, -96.921231), (32.598944, -96.288378), (32.598944, -96.288378), (29.944524, -98.711094)]
+    
+#     latitude_list = [x[0] for x in new_charging_nodes]
+#     longitude_list = [x[1] for x in new_charging_nodes]
+
+#     gmap = gmplot.GoogleMapPlotter(latitude_list[0],
+#                                    longitude_list[0], 1000)
+
+#     gmap.apikey = "AIzaSyB9N6G3mW559tfaPnaI_QVJo5MaTiwtOkE"
+
+#     # scatter method of map object
+#     # scatter points on the google map
+#     gmap.scatter(latitude_list, longitude_list, 'blue',
+#                  size=8000, marker=False)
+
+#     gmap.draw("mapPOP_{}.html".format(1))
