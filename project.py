@@ -10,6 +10,7 @@ from util import great_circle_distance
 import pylab
 import gmplot
 
+
 import matplotlib
 try:
     import matplotlib.pyplot as plt
@@ -209,7 +210,7 @@ if __name__ == '__main__':
     G, sites, counties = build_graph(c, d)
 
     # Build BQM
-    bqm = build_bqm(sites, len(counties), counties, 0, [], 5)
+    bqm = build_bqm(sites, len(counties), counties, 0, [], 30)
 
     # Run BQM on HSS
     sampler = LeapHybridSampler()
@@ -228,13 +229,15 @@ if __name__ == '__main__':
     latitude_list = [x[0] for x in new_charging_nodes] 
     longitude_list = [x[1] for x in new_charging_nodes]
 
-    gmap3 = gmplot.GoogleMapPlotter(31.9686, 
-                                    -99.9018, 20) 
+    gmap = gmplot.GoogleMapPlotter(latitude_list[0], 
+                                    longitude_list[0], 100) 
+    
+    gmap.apikey = "AIzaSyB9N6G3mW559tfaPnaI_QVJo5MaTiwtOkE"
 
     # scatter method of map object  
     # scatter points on the google map 
-    gmap3.scatter( latitude_list, longitude_list, 'cornflowerblue', 
-                                  size = 40, marker = False ) 
+    gmap.scatter( latitude_list, longitude_list, 'blue', 
+                                  size = 8000, marker = False ) 
 
 
-    gmap3.draw("map1.html") 
+    gmap.draw("map1.html") 
