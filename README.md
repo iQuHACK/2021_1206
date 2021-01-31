@@ -42,7 +42,7 @@ We want to minimize this distance.
 
 Once we map each individual to a distribution site, we use that number to allocate enough vaccinations for that distribution site. 
 
-
+Should prolly think about mobile clinics
 
 
 Future Work

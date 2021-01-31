@@ -50,30 +50,6 @@ def add_coords(df):
     
     return df
 
-
-def find_closest_center(distribution_data, county_data):
-    '''
-    Ranks the closest vaccine distribution center to a zip code by distance
-    
-    Returns a np array with index i as zipcode i. array[i] is an array of tuples (center j, dist to center j from zipcode i)
-    '''
-    county_to_closest_center = np.empty(len(county_data))
-    
-    for county_i, county_row in county_data.iterrows():
-        # get county data
-        county, num, lat, lon = county_row['County [2]'], county_row['Number 65+ Population'], county_row['Latitude'], county_row['Longitude']
-        ranked = []
-        for _, d_row in distribution_data.iterrows():
-            d_lat, d_lon = d_row['Latitude'], d_row['Longitude']
-            dist = great_circle_distance((lat, lon), (d_lat, d_lon))
-            ranked.append((d_i, dist))
-        ranked.sort(key=lambda x: x[1]) # sort by centers by distance
-        ranked = np.array(ranked)
-        county_to_closest_center[county_i] = ranked # save this zipcode's closest centers
-    
-    return county_to_closest_center
-
-
 def build_bqm(potential_new_cs_nodes, num_poi, pois, num_cs, charging_stations, num_new_cs):
     """ Build bqm that models our problem scenario for the hybrid sampler. """
 
@@ -125,8 +101,6 @@ def build_bqm(potential_new_cs_nodes, num_poi, pois, num_cs, charging_stations, 
     bqm.update(dimod.generators.combinations(bqm.variables, num_new_cs, strength=gamma4))
 
     return bqm
-
-
 
 def run_bqm(bqm, sampler, **kwargs):
     """ 
