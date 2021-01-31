@@ -183,23 +183,23 @@ def run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes, **kwargs
     
 if __name__ == '__main__':
     d, c = load_data('data/Distribution_center_locations_TX.csv', 'data/TX_Counties.csv')
-#     d = add_coords(d)
-#     c = add_coords(c)
-    
+    #     d = add_coords(d)
+    #     c = add_coords(c)
+
     # Build large grid graph for city
     G, sites, counties = build_graph(c, d)
-    
+
     # Build BQM
-    bqm = build_bqm(sites, len(sites), counties, 0, [], 10)
+    bqm = build_bqm(sites, len(counties), counties, 0, [], 5)
 
     # Run BQM on HSS
     sampler = LeapHybridSampler()
     print("\nRunning scenario on", sampler.solver.id, "solver...")
-    
+
     new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
 
     # Print results to commnand-line for user
-    printout_solution_to_cmdline(sites, len(sites), [], 0, new_charging_nodes, len(new_charging_nodes))
+    printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes, len(new_charging_nodes))
 
     # Create scenario output image
-#     save_output_image(G, pois, charging_stations, new_charging_nodes)
+    # save_output_image(G, pois, charging_stations, new_charging_nodes)
