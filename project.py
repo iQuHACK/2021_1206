@@ -35,6 +35,7 @@ def load_data(population_file, distribution_center_file):
     
     return population_data, distribution_data
 
+<<<<<<< HEAD
 
 def build_graph(population_nodes, distribution_nodes):
     G = nx.Graph()
@@ -62,6 +63,8 @@ def build_graph(population_nodes, distribution_nodes):
     
     
 
+=======
+>>>>>>> fb455fd7c13d7300e146f7c703d42144e2bd3b8b
 def build_bqm(potential_new_cs_nodes, num_distribution, distribution_data, num_cs, charging_stations, num_new_cs):
     """ Build bqm that models our problem scenario for the hybrid sampler. """
 
