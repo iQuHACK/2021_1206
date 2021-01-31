@@ -278,7 +278,7 @@ def iterate_bqm_and_graph(iters, run_num):
             gmap = gmplot.GoogleMapPlotter(latitude_list[0],
                                            longitude_list[0], 1000)
 
-            gmap.apikey = "AIzaSyB9N6G3mW559tfaPnaI_QVJo5MaTiwtOkE"
+            gmap.apikey = ""
 
             # scatter method of map object
             # scatter points on the google map
