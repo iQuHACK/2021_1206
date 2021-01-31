@@ -150,25 +150,25 @@ def printout_solution_to_cmdline(pois, num_poi, charging_stations, num_cs, new_c
 
     print("\nSolution returned: \n------------------")
     
-    print("\nNew charging locations:\t\t\t\t", new_charging_nodes)
+    print("\nNew distribution locations:\t\t\t\t", new_charging_nodes)
 
     if num_poi > 0:
         poi_avg_dist = [0] * len(new_charging_nodes)
         for loc in pois:
             for i, new in enumerate(new_charging_nodes):
                 poi_avg_dist[i] += sum(abs(a - b) for a, b in zip(new, loc)) / num_poi
-        print("Average distance to POIs:\t\t\t", poi_avg_dist)
+        print("Average distance to counties:\t\t\t", poi_avg_dist)
 
     if num_cs > 0:
         old_cs_avg_dist = [sum(abs(a - b) for a, b in zip(new, loc) for loc in charging_stations) / num_cs for new in new_charging_nodes]
-        print("Average distance to old charging stations:\t", old_cs_avg_dist)
+        print("Average distance to old distribution centers:\t", old_cs_avg_dist)
 
     if num_new_cs > 1:
         new_cs_dist = 0
         for i in range(num_new_cs):
             for j in range(i+1, num_new_cs):
                 new_cs_dist += abs(new_charging_nodes[i][0]-new_charging_nodes[j][0])+abs(new_charging_nodes[i][1]-new_charging_nodes[j][1])
-        print("Distance between new chargers:\t\t\t", new_cs_dist)
+        print("Distance between new distribution centers:\t\t\t", new_cs_dist)
         
 def run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes, **kwargs):
     """ Solve the bqm with the provided sampler to find new charger locations. """
