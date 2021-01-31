@@ -8,6 +8,7 @@ import pandas as pd
 from dwave.system import LeapHybridSampler
 from util import great_circle_distance
 import pylab
+import gmplot
 
 import matplotlib
 try:
@@ -180,6 +181,24 @@ def run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes, **kwargs
     return new_charging_nodes
     
 
+def iterate_bqm_and_graph(iters):
+    for i in range(1, iters, 77//iters):
+        # Build large grid graph for city
+        G, sites, counties = build_graph(c, d)
+
+        # Build BQM
+        bqm = build_bqm(sites, len(counties), counties, 0, [], 5)
+
+        # Run BQM on HSS
+        sampler = LeapHybridSampler()
+        print("\nRunning scenario on", sampler.solver.id, "solver...")
+
+        new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
+
+        # Print results to commnand-line for user
+        printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes, len(new_charging_nodes))
+
+        
     
 if __name__ == '__main__':
     d, c = load_data('data/Distribution_center_locations_TX.csv', 'data/TX_Counties.csv')
@@ -203,3 +222,19 @@ if __name__ == '__main__':
 
     # Create scenario output image
     # save_output_image(G, pois, charging_stations, new_charging_nodes)
+    
+    #print on map
+  
+    latitude_list = [x[0] for x in new_charging_nodes] 
+    longitude_list = [x[1] for x in new_charging_nodes]
+
+    gmap3 = gmplot.GoogleMapPlotter(31.9686, 
+                                    -99.9018, 20) 
+
+    # scatter method of map object  
+    # scatter points on the google map 
+    gmap3.scatter( latitude_list, longitude_list, 'cornflowerblue', 
+                                  size = 40, marker = False ) 
+
+
+    gmap3.draw("map1.html") 
