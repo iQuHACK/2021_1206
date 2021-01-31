@@ -80,6 +80,24 @@ def set_up_scenario(w, h, num_poi, num_cs):
 
     return G, pois, charging_stations, potential_new_cs_nodes
 
+def find_closest_node(poi, nodes):
+    '''
+    Finds closest valid, marked node to a (lat, lon) coordinate
+    INPUTS:
+        raw: (lat, lon)
+    OUTPUT:
+        node: (node_id, (lat, lon))
+    '''
+    closest = ()
+    distance = float('inf')
+    for n in nodes:
+        if len(adj_list[k]) > 0:  # checks if node is reachable via ways
+            calc = great_circle_distance(coords[k], raw)
+            if calc < distance:
+                distance = calc
+                closest = k
+    return closestt
+
 def build_bqm(potential_new_cs_nodes, num_poi, pois, num_cs, charging_stations, num_new_cs):
     """ Build bqm that models our problem scenario for the hybrid sampler. """
 
@@ -223,18 +241,20 @@ if __name__ == '__main__':
 
     # Build large grid graph for city
     G, pois, charging_stations, potential_new_cs_nodes = set_up_scenario(args.width, args.height, args.poi, args.chargers)
-
-    # Build BQM
-    bqm = build_bqm(potential_new_cs_nodes, args.poi, pois, args.chargers, charging_stations, args.new_chargers)
-
-    # Run BQM on HSS
-    sampler = LeapHybridSampler()
-    print("\nRunning scenario on", sampler.solver.id, "solver...")
     
-    new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes)
+    print(charging_stations)
 
-    # Print results to commnand-line for user
-    printout_solution_to_cmdline(pois, args.poi, charging_stations, args.chargers, new_charging_nodes, args.new_chargers)
+#     # Build BQM
+#     bqm = build_bqm(potential_new_cs_nodes, args.poi, pois, args.chargers, charging_stations, args.new_chargers)
 
-    # Create scenario output image
-    save_output_image(G, pois, charging_stations, new_charging_nodes)
+#     # Run BQM on HSS
+#     sampler = LeapHybridSampler()
+#     print("\nRunning scenario on", sampler.solver.id, "solver...")
+    
+#     new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes)
+
+#     # Print results to commnand-line for user
+#     printout_solution_to_cmdline(pois, args.poi, charging_stations, args.chargers, new_charging_nodes, args.new_chargers)
+
+#     # Create scenario output image
+#     save_output_image(G, pois, charging_stations, new_charging_nodes)
