@@ -1,15 +1,4 @@
-# Welcome to iQuHACK 2021!
-Check out some info in the [event's repository](https://github.com/iQuHACK/2021) to get started.
+# Optimizing COVID-19 Vaccine Distribution
 
-Having a README in your team's repository facilitates judging. A good README contains:
-* a clear title for your project,
-* a short abstract,
-* the motivation/goals for your project,
-* a description of the work you did, and
-* proposals for future work.
-
-You can find a potential README template in [one of last year's projects](https://github.com/iQuHACK/QuhacMan).
-
-Feel free to contact the staff with questions over our [event's slack](https://iquhack.slack.com), or via iquhack@mit.edu.
-
-Good luck!
+## Abstract
+Quantum annealing finds the global minimum of an objective function over a set of states. In this project, we model COVID-19 vaccine distribution in the state of Texas a graph and seek to minimize the average distance an individual must travel to a vaccine center.
