@@ -6,12 +6,9 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 from dwave.system import LeapHybridSampler
-<<<<<<< HEAD
 from utils import *
-=======
 from util import great_circle_distance
 import pylab
->>>>>>> 95669390d3cce2ff366b8959b99b9035c6c00d38
 
 import matplotlib
 try:
@@ -32,27 +29,19 @@ def load_csv(filename, dtype=None, keep=None):
         df = df[keep]
     return df
 
-<<<<<<< HEAD
 
-def load_data(distribution_center_file, county_file):
-=======
 def load_data(population_file, distribution_center_file):
->>>>>>> 95669390d3cce2ff366b8959b99b9035c6c00d38
+
     '''
     Returns data from files as pandas df
     '''
-    
-<<<<<<< HEAD
+
     distribution_data = load_csv(distribution_center_file, ['Latitude', 'Longitude'])
     county_data = load_csv(county_file, ['County [2]', 'Latitude', 'Longitude', 'Number 65+ Population'])
-=======
     population_data = load_csv(population_file, ['County','Latitude', 'Longitude'])
     distribution_data = load_csv(distribution_center_file, ['Name','Latitude', 'Longitude'])
->>>>>>> 95669390d3cce2ff366b8959b99b9035c6c00d38
     
     return distribution_data, county_data
-
-<<<<<<< HEAD
 
 def add_coords(df):
     '''
