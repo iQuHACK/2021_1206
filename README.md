@@ -5,6 +5,7 @@ Abstract
 Quantum annealing hardware has demonstrated the potential to solve discrete optimization problems by using qubits to model physical energy states. Using DWave’s annealing technology, we aim to gain insight into the process of distributing vaccines which maximizes the number of people vaccinated in the shortest possible time. 
 
 
+
 Motivation
 ---
 The rate at which people are being vaccinated is a lot slower than initially predicted by government officials. This may be due to a combination of factors such as delays in shipping vaccines to distribution centers, long distances that patients must travel to receive a vaccine, long wait times for the vaccine, and leftover vaccinations expiring. A lack of a government plan for vaccine distribution has the potential to increase the number of deaths in the US and also weaken the already strained healthcare system via more hospitalizations. Therefore, we aim to find the best allocation of individuals to COVID-19 vaccine distribution centers that minimizes the distance individuals must travel to reach the site while simultaneously maximizing the number of individuals that receive the vaccination. 
@@ -34,15 +35,14 @@ Constraint 1: The average distance each individual would have to travel to a dis
 
 We want to minimize this distance. 
 
-Once we map each individual to a distribution site, 
+Once we map each individual to a distribution site, we use that number to allocate enough vaccinations for that distribution site. 
 
-
-Using this minimization 
 
 
 
 Future Work
 ---
+Currently, we are assigning individuals to distribution sites and then allocating vaccines. Once vaccinations become available for the general public, there will be more a lot more demand compared to supply. In this case, 
 
 
 
