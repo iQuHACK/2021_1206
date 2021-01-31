@@ -171,6 +171,8 @@ def printout_solution_to_cmdline(pois, num_poi, charging_stations, num_cs, new_c
                 new_cs_dist += abs(new_charging_nodes[i][0]-new_charging_nodes[j][0])+abs(new_charging_nodes[i][1]-new_charging_nodes[j][1])
         print("Distance between new distribution centers:\t\t\t", new_cs_dist)
         
+        return poi_avg_dist
+        
 def run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes, **kwargs):
     """ Solve the bqm with the provided sampler to find new charger locations. """
 
@@ -183,12 +185,15 @@ def run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes, **kwargs
     
 
 def iterate_bqm_and_graph(iters):
-    for i in range(1, iters, 77//iters):
+    step = 77//iters
+    d, c = load_data('data/Distribution_center_locations_TX.csv', 'data/TX_Counties.csv')
+    
+    for i in range(0, 77, step):
         # Build large grid graph for city
         G, sites, counties = build_graph(c, d)
 
         # Build BQM
-        bqm = build_bqm(sites, len(counties), counties, 0, [], 5)
+        bqm = build_bqm(sites, len(counties), counties, 0, [], i)
 
         # Run BQM on HSS
         sampler = LeapHybridSampler()
@@ -197,47 +202,71 @@ def iterate_bqm_and_graph(iters):
         new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
 
         # Print results to commnand-line for user
-        printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes, len(new_charging_nodes))
+        poi_avg_dist = printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes, len(new_charging_nodes))
+        
+        try:
+            latitude_list = [x[0] for x in new_charging_nodes] 
+            longitude_list = [x[1] for x in new_charging_nodes]
+
+            gmap = gmplot.GoogleMapPlotter(latitude_list[0], 
+                                            longitude_list[0], 1000) 
+
+            gmap.apikey = "AIzaSyB9N6G3mW559tfaPnaI_QVJo5MaTiwtOkE"
+
+            # scatter method of map object  
+            # scatter points on the google map 
+            gmap.scatter( latitude_list, longitude_list, 'blue', 
+                                          size = 8000, marker = False ) 
+
+
+            gmap.draw("results/map_{}.html".format(i)) 
+        except:
+            print("STEP 0")
+            
+        np.save("results/sites_{}.npy".format(i), new_charging_nodes)
+        np.save("results/distances_{}.npy".format(i), poi_avg_dist)
 
         
     
 if __name__ == '__main__':
-    d, c = load_data('data/Distribution_center_locations_TX.csv', 'data/TX_Counties.csv')
-    #     d = add_coords(d)
-    #     c = add_coords(c)
+#     d, c = load_data('data/Distribution_center_locations_TX.csv', 'data/TX_Counties.csv')
+#     #     d = add_coords(d)
+#     #     c = add_coords(c)
 
-    # Build large grid graph for city
-    G, sites, counties = build_graph(c, d)
+#     # Build large grid graph for city
+#     G, sites, counties = build_graph(c, d)
 
-    # Build BQM
-    bqm = build_bqm(sites, len(counties), counties, 0, [], 30)
+#     # Build BQM
+#     bqm = build_bqm(sites, len(counties), counties, 0, [], 30)
 
-    # Run BQM on HSS
-    sampler = LeapHybridSampler()
-    print("\nRunning scenario on", sampler.solver.id, "solver...")
+#     # Run BQM on HSS
+#     sampler = LeapHybridSampler()
+#     print("\nRunning scenario on", sampler.solver.id, "solver...")
 
-    new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
+#     new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, sites)
 
-    # Print results to commnand-line for user
-    printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes, len(new_charging_nodes))
+#     # Print results to commnand-line for user
+#     printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes, len(new_charging_nodes))
 
-    # Create scenario output image
-    # save_output_image(G, pois, charging_stations, new_charging_nodes)
+#     # Create scenario output image
+#     # save_output_image(G, pois, charging_stations, new_charging_nodes)
     
-    #print on map
+#     #print on map
   
-    latitude_list = [x[0] for x in new_charging_nodes] 
-    longitude_list = [x[1] for x in new_charging_nodes]
+#     latitude_list = [x[0] for x in new_charging_nodes] 
+#     longitude_list = [x[1] for x in new_charging_nodes]
 
-    gmap = gmplot.GoogleMapPlotter(latitude_list[0], 
-                                    longitude_list[0], 100) 
+#     gmap = gmplot.GoogleMapPlotter(latitude_list[0], 
+#                                     longitude_list[0], 100) 
     
-    gmap.apikey = "AIzaSyB9N6G3mW559tfaPnaI_QVJo5MaTiwtOkE"
+#     gmap.apikey = "AIzaSyB9N6G3mW559tfaPnaI_QVJo5MaTiwtOkE"
 
-    # scatter method of map object  
-    # scatter points on the google map 
-    gmap.scatter( latitude_list, longitude_list, 'blue', 
-                                  size = 8000, marker = False ) 
+#     # scatter method of map object  
+#     # scatter points on the google map 
+#     gmap.scatter( latitude_list, longitude_list, 'blue', 
+#                                   size = 8000, marker = False ) 
 
 
-    gmap.draw("map1.html") 
+#     gmap.draw("map1.html") 
+
+    iterate_bqm_and_graph(10)
