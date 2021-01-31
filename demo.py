@@ -96,7 +96,7 @@ def find_closest_node(poi, nodes):
             if calc < distance:
                 distance = calc
                 closest = k
-    return closestt
+    return closest
 
 def build_bqm(potential_new_cs_nodes, num_poi, pois, num_cs, charging_stations, num_new_cs):
     """ Build bqm that models our problem scenario for the hybrid sampler. """
