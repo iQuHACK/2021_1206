@@ -100,6 +100,19 @@ Future Work
 We believe that a better model of this problem would seek to minimize the distance between a county and its closest vaccine distribution center. We also would recommend iterating this process at a smaller scale, like zip code, to better serve local communities. We defined at-risk populations as only those over the age of 65 but we can expand that definition and include individuals with a history of chronic and respiratory diseases.
 
 
+References
+--
+Data
+
+- [ev-charger-placement][1]
+- [County Locations (TX)][2]
+- [Distribution centers in TX][3]
+- [Percentage of population 65+ in TX][4]
+
+[1]: https://github.com/dwave-examples/ev-charger-placement
+[2]: https://en.wikipedia.org/wiki/User:Michael_J/County_table
+[3]: https://docs.google.com/document/d/18A6YvL7IZiQeE0j7RLqRRcsSovxu-e_qsWc5Vyof778/edit
+[4]: https://www.indexmundi.com/facts/united-states/quick-facts/texas/percent-of-population-65-and-over#table
 
 iQuHACK 2020 Team 1206
 ---
