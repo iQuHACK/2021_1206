@@ -19,7 +19,11 @@ except ImportError:
 
 def load_csv(filename, dtype=None, keep=None):
     '''
-    Returns a pandas df from a csv file. keep (list) contains columns to keep.
+    Returns a pandas dataframe from a csv file. 
+    
+    PARAMS:
+        keep (list) - contains columns to keep
+        
     '''
     df = pd.read_csv(filename, header=0)
     df['Latitude'] = df['Latitude'].replace("–","", regex=True).astype(float)
@@ -74,18 +78,6 @@ def build_bqm(potential_new_cs_nodes, num_poi, pois, num_cs, charging_stations, 
                                     + cand_loc[1]**2 - 2*cand_loc[1]*loc[1] + loc[1]**2)
                 avg_dist += dist / num_poi 
             bqm.linear[i] += avg_dist * gamma1
-
-    # Constraint 2: Max distance to existing chargers
-    if num_cs > 0:
-        for i in range(len(potential_new_cs_nodes)):
-            # Compute average distance to POIs from this node
-            avg_dist = 0
-            cand_loc = potential_new_cs_nodes[i]
-            for loc in charging_stations:
-                dist = (-1*cand_loc[0]**2 + 2*cand_loc[0]*loc[0] - loc[0]**2
-                                    - cand_loc[1]**2 + 2*cand_loc[1]*loc[1] - loc[1]**2)
-                avg_dist += dist / num_cs
-            bqm.linear[i] += avg_dist * gamma2
 
     # Constraint 3: Max distance to other new charging locations
     if num_new_cs > 1:
@@ -200,6 +192,8 @@ if __name__ == '__main__':
 
     # Print results to commnand-line for user
     printout_solution_to_cmdline(counties, len(counties), [], 0, new_charging_nodes, len(new_charging_nodes))
+    
+    # 
 
     # Create scenario output image
     # save_output_image(G, pois, charging_stations, new_charging_nodes)
