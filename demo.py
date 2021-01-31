@@ -244,17 +244,17 @@ if __name__ == '__main__':
     
     print(charging_stations)
 
-#     # Build BQM
-#     bqm = build_bqm(potential_new_cs_nodes, args.poi, pois, args.chargers, charging_stations, args.new_chargers)
+    # Build BQM
+    bqm = build_bqm(potential_new_cs_nodes, args.poi, pois, args.chargers, charging_stations, args.new_chargers)
 
-#     # Run BQM on HSS
-#     sampler = LeapHybridSampler()
-#     print("\nRunning scenario on", sampler.solver.id, "solver...")
+    # Run BQM on HSS
+    sampler = LeapHybridSampler()
+    print("\nRunning scenario on", sampler.solver.id, "solver...")
     
-#     new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes)
+    new_charging_nodes = run_bqm_and_collect_solutions(bqm, sampler, potential_new_cs_nodes)
 
-#     # Print results to commnand-line for user
-#     printout_solution_to_cmdline(pois, args.poi, charging_stations, args.chargers, new_charging_nodes, args.new_chargers)
+    # Print results to commnand-line for user
+    printout_solution_to_cmdline(pois, args.poi, charging_stations, args.chargers, new_charging_nodes, args.new_chargers)
 
-#     # Create scenario output image
-#     save_output_image(G, pois, charging_stations, new_charging_nodes)
+    # Create scenario output image
+    save_output_image(G, pois, charging_stations, new_charging_nodes)
